@@ -1,0 +1,27 @@
+{
+  "name": "switchy",
+  "version": "1.0.0",
+  "description": "Pattern matching with JavaScript",
+  "main": "index.js",
+  "author": "Johan Palmfjord <johan.palmfjord@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^22.4.3",
+    "ts-jest": "^22.4.6",
+    "typescript": "^2.8.3"
+  },
+  "jest": {
+    "transform": {
+      "\\.ts$": "ts-jest"
+    },
+    "testRegex": "\\.test\\.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  }
+}
