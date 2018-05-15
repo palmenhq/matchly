@@ -1,13 +1,11 @@
 import { switchy } from '.'
 
 test('throws error if gets invalid pattern match', done => {
-  const condition = switchy([
-    [[1, 2], () => {}]
-  ])
+  const condition = switchy([[[1, 2], () => {}]])
 
   try {
     condition('blargh' as any)
-    done.fail('Should\'ve thrown a type error')
+    done.fail("Should've thrown a type error")
   } catch (e) {
     if (e instanceof TypeError) {
       done()
@@ -22,7 +20,7 @@ test('switches correctly over array', () => {
   const branch1 = (values: [number, number]) => values[0] + values[1]
   const branch2 = (values: [number, number]) => values[0] * values[1]
   const branch3 = (values: [number, number]) => values[0] / values[1]
-  const defaultBranch = (value) => value
+  const defaultBranch = value => value
 
   const condition = switchy([
     [[1, 2], branch1],
@@ -42,14 +40,12 @@ test('returns undefined with no default branch and no matched value', () => {
   expect(switchy([[1, () => 'blargh']])(2)).toBe(undefined)
 })
 
-test('throws error if match length doesn\'t match pattern length', done => {
-  const condition = switchy([
-    [[1, 2], () => {}]
-  ])
+test("throws error if match length doesn't match pattern length", done => {
+  const condition = switchy([[[1, 2], () => {}]])
 
   try {
     condition([1, 2, 3, 4])
-    done.fail('Should\'ve thrown a type error')
+    done.fail("Should've thrown a type error")
   } catch (e) {
     if (e instanceof TypeError) {
       done()
@@ -63,7 +59,7 @@ test('throws error if match length doesn\'t match pattern length', done => {
 test('switches correctly over non-arrays', () => {
   const branch1 = (value: string) => 'no'
   const branch2 = (value: string) => 'yes'
-  const defaultBranch = (_) => 'maybe'
+  const defaultBranch = _ => 'maybe'
 
   const condition = switchy([
     ['a', branch1],
