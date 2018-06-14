@@ -1,5 +1,9 @@
 /index.js
 /index.d.ts
+/matchers.js
+/matchers.d.ts
+/utils.js
+/utils.d.ts
 /coverage
 yarn-error.log
 node_modules

@@ -12,6 +12,7 @@
     "prepublish": "yarn build"
   },
   "devDependencies": {
+    "@types/jest": "^23.1.0",
     "jest": "^22.4.3",
     "ts-jest": "^22.4.6",
     "typescript": "^2.8.3"

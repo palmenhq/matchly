@@ -1,11 +1,14 @@
-export type PatternAndBranch<T, R> = [
-  T | undefined,
-  (matched: T | undefined) => R
+import { anySingle, any, Matcher, rest } from './matchers'
+import { last } from './utils'
+
+export type PatternAndBranch<T, R = T> = [
+  T | Matcher | undefined,
+  (matched: T) => R
 ]
 
 const NOOP = {}
 
-export const switchy = <T, R>(
+export const switchyBase = <T, R>(
   patternsAndBranches: PatternAndBranch<T, R>[]
 ) => {
   return (match: T): R | undefined =>
@@ -14,14 +17,14 @@ export const switchy = <T, R>(
         const pattern = patternAndBranch[0]
         const branch = patternAndBranch[1]
 
-        if (pattern !== undefined && typeof pattern !== typeof match) {
+        if (pattern !== any && typeof pattern !== typeof match) {
           throw new TypeError(
             `Invalid match of type "${typeof match}" provided, expected "${typeof pattern}"`
           )
         }
 
         if (pattern instanceof Array && match instanceof Array) {
-          if (pattern.length !== match.length) {
+          if (pattern.length !== match.length && last(pattern) !== rest) {
             throw new TypeError(
               `Expected a match of length ${
                 pattern.length
@@ -29,9 +32,19 @@ export const switchy = <T, R>(
             )
           }
 
+          if (pattern.indexOf(rest) !== pattern.length - 1 && pattern.indexOf(rest) !== -1) {
+            throw new TypeError('rest operator can only be placed last in pattern')
+          }
+
           const result = pattern.filter(
-            (value, index) => value === undefined || value === match[index]
+            (value, index) => {
+              return value === rest || value === anySingle || value === match[index]
+            }
           )
+
+          if (last(pattern) === rest && result.length - 1 === pattern.indexOf(rest)) {
+            return branch(match)
+          }
 
           if (result.length === match.length) {
             return branch(match)
@@ -44,7 +57,7 @@ export const switchy = <T, R>(
           return branch(match)
         }
 
-        if (pattern === undefined) {
+        if (pattern === any) {
           return branch(match)
         }
 
@@ -52,3 +65,13 @@ export const switchy = <T, R>(
       })
       .filter(result => result !== NOOP)[0] as R | undefined
 }
+
+export interface ReturnsMatcher {
+  () : any | Matcher
+}
+
+export const switchy = Object.assign(switchyBase, {
+  anySingle: (() => anySingle) as ReturnsMatcher,
+  any: (() => any) as ReturnsMatcher,
+  rest: (() => rest) as ReturnsMatcher,
+})

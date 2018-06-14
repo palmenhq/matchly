@@ -20,20 +20,48 @@ test('switches correctly over array', () => {
   const branch1 = (values: [number, number]) => values[0] + values[1]
   const branch2 = (values: [number, number]) => values[0] * values[1]
   const branch3 = (values: [number, number]) => values[0] / values[1]
-  const defaultBranch = value => value
+  const defaultBranch = (value: [number, number]) => value[0]
 
   const condition = switchy([
     [[1, 2], branch1],
     [[2, 3], branch2],
-    [[12, undefined], branch3],
-    [undefined, defaultBranch]
+    [[12, switchy.anySingle()], branch3],
+    [switchy.any(), defaultBranch]
   ])
 
   expect(condition([1, 2])).toBe(3)
   expect(condition([2, 3])).toBe(6)
   expect(condition([12, 6])).toBe(2)
   expect(condition([12, 2])).toBe(6)
-  expect(condition([1337, 42])).toEqual([1337, 42])
+  expect(condition([1337, 42])).toEqual(1337)
+})
+
+test('switches correctly over rest', () => {
+  const branch = (values: string[]) => values
+
+  const condition = switchy([
+    [['a', 'b', switchy.rest()], branch]
+  ])
+
+  expect(condition(['a', 'b', 'c', 'd'])).toEqual(['a', 'b', 'c', 'd'])
+  expect(condition(['a', 'b'])).toEqual(['a', 'b'])
+  expect(condition(['b', 'c'])).toEqual(undefined)
+})
+
+test('throws error when rest is not last', done => {
+  const condition = switchy([
+    [['a', switchy.rest(), 'b'], () => {}],
+  ])
+
+  try {
+    condition([0, 0, 0])
+    done.fail('Should have thrown TypeError but didn\'t')
+  } catch (e) {
+    if (!(e instanceof TypeError)) {
+      done.fail(e)
+    }
+    done()
+  }
 })
 
 test('returns undefined with no default branch and no matched value', () => {
@@ -57,14 +85,14 @@ test("throws error if match length doesn't match pattern length", done => {
 })
 
 test('switches correctly over non-arrays', () => {
-  const branch1 = (value: string) => 'no'
-  const branch2 = (value: string) => 'yes'
-  const defaultBranch = _ => 'maybe'
+  const branch1 = () => 'no'
+  const branch2 = () => 'yes'
+  const defaultBranch = () => 'maybe'
 
   const condition = switchy([
     ['a', branch1],
     ['b', branch2],
-    [undefined, defaultBranch]
+    [switchy.any(), defaultBranch]
   ])
 
   expect(condition('a')).toBe('no')
