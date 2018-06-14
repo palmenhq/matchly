@@ -15,8 +15,8 @@ const branch2 = _ => 'yes'
 const defaultBranch = _ => 'maybe'
 
 const condition = switchy([
-  ['a', branch1],
-  ['b', branch2],
+  ['a',           branch1],
+  ['b',           branch2],
   [switchy.any(), defaultBranch]
 ])
 
@@ -37,10 +37,10 @@ const branch3 = (values) => values[0] / values[1]
 const defaultBranch = value => value
 
 const condition = switchy([
-  [[1, 2], branch1],
-  [[2, 3], branch2],
+  [[1,  2],                   branch1],
+  [[2,  3],                   branch2],
   [[12, switchy.anySingle()], branch3],
-  [switchy.any(), defaultBranch]
+  [switchy.any(),             defaultBranch]
 ])
 
 condition([1, 2]) // 3 (branch1)
@@ -59,7 +59,7 @@ const branch1 = (values) => 'branch1: ' + values
 const branch2 = (values) => 'branch2: ' + values
 
 const condition = switchy([
-    [['a', 'b', 'c'], branch1],
+    [['a', 'b', 'c'],       branch1],
     [['a', switchy.rest()], branch2],
 ])
 
