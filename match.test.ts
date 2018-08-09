@@ -1,7 +1,7 @@
-import { switchy } from '.'
+import { match } from './match'
 
 test('throws error if gets invalid pattern match', done => {
-  const condition = switchy([[[1, 2], () => {}]])
+  const condition = match([[[1, 2], () => {}]])
 
   try {
     condition('blargh' as any)
@@ -22,11 +22,11 @@ test('switches correctly over array', () => {
   const branch3 = (values: [number, number]) => values[0] / values[1]
   const defaultBranch = (value: [number, number]) => value[0]
 
-  const condition = switchy([
+  const condition = match([
     [[1, 2], branch1],
     [[2, 3], branch2],
-    [[12, switchy.anySingle()], branch3],
-    [switchy.any(), defaultBranch]
+    [[12, match.anySingle()], branch3],
+    [match.any(), defaultBranch]
   ])
 
   expect(condition([1, 2])).toBe(3)
@@ -39,8 +39,8 @@ test('switches correctly over array', () => {
 test('switches correctly over rest', () => {
   const branch = (values: string[]) => values
 
-  const condition = switchy([
-    [['a', 'b', switchy.rest()], branch]
+  const condition = match([
+    [['a', 'b', match.rest()], branch]
   ])
 
   expect(condition(['a', 'b', 'c', 'd'])).toEqual(['a', 'b', 'c', 'd'])
@@ -49,8 +49,8 @@ test('switches correctly over rest', () => {
 })
 
 test('throws error when rest is not last', done => {
-  const condition = switchy([
-    [['a', switchy.rest(), 'b'], () => {}],
+  const condition = match([
+    [['a', match.rest(), 'b'], () => {}],
   ])
 
   try {
@@ -65,11 +65,11 @@ test('throws error when rest is not last', done => {
 })
 
 test('returns undefined with no default branch and no matched value', () => {
-  expect(switchy([[1, () => 'blargh']])(2)).toBe(undefined)
+  expect(match([[1, () => 'blargh']])(2)).toBe(undefined)
 })
 
 test("throws error if match length doesn't match pattern length", done => {
-  const condition = switchy([[[1, 2], () => {}]])
+  const condition = match([[[1, 2], () => {}]])
 
   try {
     condition([1, 2, 3, 4])
@@ -89,10 +89,10 @@ test('switches correctly over non-arrays', () => {
   const branch2 = () => 'yes'
   const defaultBranch = () => 'maybe'
 
-  const condition = switchy([
+  const condition = match([
     ['a', branch1],
     ['b', branch2],
-    [switchy.any(), defaultBranch]
+    [match.any(), defaultBranch]
   ])
 
   expect(condition('a')).toBe('no')

@@ -8,16 +8,16 @@ Match whatever you need, with wildcards.
 With one condition
 
 ```js
-import { switchy } from 'switchy'
+import { match } from 'switchy'
 
 const branch1 = _ => 'no'
 const branch2 = _ => 'yes'
 const defaultBranch = _ => 'maybe'
 
-const condition = switchy([
+const condition = match([
   ['a',           branch1],
   ['b',           branch2],
-  [switchy.any(), defaultBranch]
+  [match.any(), defaultBranch]
 ])
 
 condition('a') // no
@@ -29,18 +29,18 @@ condition('e') // maybe
 With multiple conditions
 
 ```js
-import { switchy } from 'switchy'
+import { match } from 'switchy'
 
 const branch1 = (values) => values[0] + values[1]
 const branch2 = (values) => values[0] * values[1]
 const branch3 = (values) => values[0] / values[1]
 const defaultBranch = value => value
 
-const condition = switchy([
+const condition = match([
   [[1,  2],                   branch1],
   [[2,  3],                   branch2],
-  [[12, switchy.anySingle()], branch3],
-  [switchy.any(),             defaultBranch]
+  [[12, match.anySingle()], branch3],
+  [match.any(),             defaultBranch]
 ])
 
 condition([1, 2]) // 3 (branch1)
@@ -53,14 +53,14 @@ condition([1337, 42]) // [1337, 42] (defaultBranch)
 Collecting `rest`
 
 ```js
-import { switchy } from 'switchy'
+import { match } from 'switchy'
 
 const branch1 = (values) => 'branch1: ' + values
 const branch2 = (values) => 'branch2: ' + values
 
-const condition = switchy([
+const condition = match([
     [['a', 'b', 'c'],       branch1],
-    [['a', switchy.rest()], branch2],
+    [['a', match.rest()], branch2],
 ])
 
 condition(['a', 'b', 'c']) // branch1: a,b,c
