@@ -15,8 +15,8 @@ const branch2 = _ => 'yes'
 const defaultBranch = _ => 'maybe'
 
 const condition = match([
-  ['a',           branch1],
-  ['b',           branch2],
+  ['a',         branch1],
+  ['b',         branch2],
   [match.any(), defaultBranch]
 ])
 
@@ -37,8 +37,8 @@ const branch3 = (values) => values[0] / values[1]
 const defaultBranch = value => value
 
 const condition = match([
-  [[1,  2],                   branch1],
-  [[2,  3],                   branch2],
+  [[1,  2],                 branch1],
+  [[2,  3],                 branch2],
   [[12, match.anySingle()], branch3],
   [match.any(),             defaultBranch]
 ])
@@ -59,7 +59,7 @@ const branch1 = (values) => 'branch1: ' + values
 const branch2 = (values) => 'branch2: ' + values
 
 const condition = match([
-    [['a', 'b', 'c'],       branch1],
+    [['a', 'b', 'c'],     branch1],
     [['a', match.rest()], branch2],
 ])
 
