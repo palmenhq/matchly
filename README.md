@@ -10,9 +10,9 @@ With one condition
 ```js
 import { match } from 'switchy'
 
-const branch1 = _ => 'no'
-const branch2 = _ => 'yes'
-const defaultBranch = _ => 'maybe'
+const branch1 = 'no'
+const branch2 = 'yes'
+const defaultBranch = 'maybe'
 
 const condition = match([
   ['a',         branch1],

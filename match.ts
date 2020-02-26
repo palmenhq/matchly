@@ -1,9 +1,13 @@
 import { anySingle, any, Matcher, rest } from './matchers'
 import { last } from './utils'
 
+export interface BranchFunction<T, R = T> {
+  (matched: T) :R
+}
+
 export type PatternAndBranch<T, R = T> = [
   T | Matcher | undefined,
-  R | ((matched: T) => R)
+  R | BranchFunction<T, R>
 ]
 
 const NOOP = {}
@@ -13,9 +17,9 @@ export const switchyBase = <T, R>(
 ) => (match: T): R | undefined =>
   patternsAndBranches
     .map(([pattern, originalBranch]) => {
-      const branch: (matched: T) => R =
+      const branch: BranchFunction<T, R> =
         typeof originalBranch === 'function'
-          ? originalBranch
+          ? originalBranch as BranchFunction<T, R>
           : (_: T) => originalBranch
 
       if (pattern !== any && typeof pattern !== typeof match) {
@@ -71,7 +75,7 @@ export const switchyBase = <T, R>(
     .filter(result => result !== NOOP)[0] as R | undefined
 
 export interface ReturnsMatcher {
-  (): any | Matcher
+  (): Matcher
 }
 
 export const match = Object.assign(switchyBase, {

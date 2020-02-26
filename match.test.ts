@@ -85,8 +85,8 @@ test("throws error if match length doesn't match pattern length", done => {
 })
 
 test('switches correctly over non-arrays', () => {
-  const branch1 = () => 'no'
-  const branch2 = () => 'yes'
+  const branch1 = 'no'
+  const branch2 = 'yes'
   const defaultBranch = () => 'maybe'
 
   const condition = match([
