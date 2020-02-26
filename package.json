@@ -1,5 +1,5 @@
 {
-  "name": "switchy",
+  "name": "matchly",
   "version": "1.0.0",
   "description": "Pattern matching with JavaScript",
   "main": "./lib/index.js",

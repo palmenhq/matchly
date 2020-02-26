@@ -1,4 +1,4 @@
-# switchy
+# matchly
 Pattern matching for JavaScript (and TypeScript)
 
 ## Usage
@@ -8,7 +8,7 @@ Match whatever you need, with wildcards.
 With one condition
 
 ```js
-import { match } from 'switchy'
+import { match } from 'matchly'
 
 const branch1 = 'no'
 const branch2 = 'yes'
@@ -29,7 +29,7 @@ condition('e') // maybe
 With multiple conditions
 
 ```js
-import { match } from 'switchy'
+import { match } from 'matchly'
 
 const branch1 = (values) => values[0] + values[1]
 const branch2 = (values) => values[0] * values[1]
@@ -53,7 +53,7 @@ condition([1337, 42]) // [1337, 42] (defaultBranch)
 Collecting `rest`
 
 ```js
-import { match } from 'switchy'
+import { match } from 'matchly'
 
 const branch1 = (values) => 'branch1: ' + values
 const branch2 = (values) => 'branch2: ' + values

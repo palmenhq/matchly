@@ -12,7 +12,7 @@ export type PatternAndBranch<T, R = T> = [
 
 const NOOP = {}
 
-export const switchyBase = <T, R>(
+export const matchlyBase = <T, R>(
   patternsAndBranches: PatternAndBranch<T, R>[]
 ) => (match: T): R | undefined =>
   patternsAndBranches
@@ -78,7 +78,7 @@ export interface ReturnsMatcher {
   (): Matcher | any
 }
 
-export const match = Object.assign(switchyBase, {
+export const match = Object.assign(matchlyBase, {
   anySingle: (() => anySingle) as ReturnsMatcher,
   any: (() => any) as ReturnsMatcher,
   rest: (() => rest) as ReturnsMatcher
