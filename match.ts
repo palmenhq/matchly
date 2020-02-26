@@ -75,7 +75,7 @@ export const switchyBase = <T, R>(
     .filter(result => result !== NOOP)[0] as R | undefined
 
 export interface ReturnsMatcher {
-  (): Matcher
+  (): Matcher | any
 }
 
 export const match = Object.assign(switchyBase, {
