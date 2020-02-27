@@ -1,19 +1,9 @@
 import { match } from './match'
 
-test('throws error if gets invalid pattern match', done => {
+test("doesn't match if gets invalid pattern match", () => {
   const condition = match([[[1, 2], () => {}]])
 
-  try {
-    condition('blargh' as any)
-    done.fail("Should've thrown a type error")
-  } catch (e) {
-    if (e instanceof TypeError) {
-      done()
-      return
-    }
-
-    done.fail(`Expected error to be TypeError but was ${typeof e}`)
-  }
+  expect(condition('blargh' as any)).toBeUndefined()
 })
 
 test('switches correctly over array', () => {
@@ -39,9 +29,7 @@ test('switches correctly over array', () => {
 test('switches correctly over rest', () => {
   const branch = (values: string[]) => values
 
-  const condition = match([
-    [['a', 'b', match.rest()], branch]
-  ])
+  const condition = match([[['a', 'b', match.rest()], branch]])
 
   expect(condition(['a', 'b', 'c', 'd'])).toEqual(['a', 'b', 'c', 'd'])
   expect(condition(['a', 'b'])).toEqual(['a', 'b'])
@@ -49,13 +37,11 @@ test('switches correctly over rest', () => {
 })
 
 test('throws error when rest is not last', done => {
-  const condition = match([
-    [['a', match.rest(), 'b'], () => {}],
-  ])
+  const condition = match([[['a', match.rest(), 'b'], () => {}]])
 
   try {
     condition([0, 0, 0])
-    done.fail('Should have thrown TypeError but didn\'t')
+    done.fail("Should have thrown TypeError but didn't")
   } catch (e) {
     if (!(e instanceof TypeError)) {
       done.fail(e)
@@ -98,4 +84,5 @@ test('switches correctly over non-arrays', () => {
   expect(condition('a')).toBe('no')
   expect(condition('b')).toBe('yes')
   expect(condition('c')).toBe('maybe')
+  expect(condition(undefined)).toBe('maybe')
 })

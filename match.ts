@@ -2,7 +2,7 @@ import { anySingle, any, Matcher, rest } from './matchers'
 import { last } from './utils'
 
 export interface BranchFunction<T, R = T> {
-  (matched: T) :R
+  (matched: T): R
 }
 
 export type PatternAndBranch<T, R = T> = [
@@ -19,14 +19,8 @@ export const matchlyBase = <T, R>(
     .map(([pattern, originalBranch]) => {
       const branch: BranchFunction<T, R> =
         typeof originalBranch === 'function'
-          ? originalBranch as BranchFunction<T, R>
+          ? (originalBranch as BranchFunction<T, R>)
           : (_: T) => originalBranch
-
-      if (pattern !== any && typeof pattern !== typeof match) {
-        throw new TypeError(
-          `Invalid match of type "${typeof match}" provided, expected "${typeof pattern}"`
-        )
-      }
 
       if (pattern instanceof Array && match instanceof Array) {
         if (pattern.length !== match.length && last(pattern) !== rest) {
